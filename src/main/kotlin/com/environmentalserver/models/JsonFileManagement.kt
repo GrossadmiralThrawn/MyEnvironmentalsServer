@@ -18,11 +18,11 @@ import java.util.concurrent.TimeUnit
 
 @Service
 class JsonFileManagement(private val objectMapper: ObjectMapper) {
-    private val directory             = File("${System.getProperty("user.dir")}/ReceivedFiles").apply {
-        if (!exists()) mkdirs()}
-    private var coroutineRunning      = false
-    private val sleepingTime:    Long = 28800000 // 8 Stunden warten, bevor erneut geprüft wird
-
+    private val directory = File("${System.getProperty("user.dir")}/ReceivedFiles").apply {
+        if (!exists()) mkdirs()
+    }
+    private var coroutineRunning = false
+    private val sleepingTime: Long = 28800000 // 8 Stunden warten, bevor erneut geprüft wird
 
 
     fun getCoroutineRunning(): Boolean {
@@ -33,29 +33,28 @@ class JsonFileManagement(private val objectMapper: ObjectMapper) {
 
 
     fun writeToJSONFile(controllerData: ControllerData): Boolean {
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm") // Ersetze ":" durch "-" für gültige Dateinamen
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm")
         val current = LocalDateTime.now().format(formatter)
 
         if (!directory.exists()) {
-            directory.mkdirs() // Erstellt das Verzeichnis, falls es nicht existiert
+            directory.mkdirs()
         }
 
         val file = File(directory, "${controllerData.controllerID}_At_${current}.json")
 
         return try {
-            var jsonString = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(controllerData)
-            jsonString = jsonString.replace(",", ",\n")// Ersetze jedes Komma mit einem Komma + Zeilenumbruch für bessere Lesbarkeit
+            val jsonString = objectMapper.writerWithDefaultPrettyPrinter()
+                .writeValueAsString(controllerData) // Pretty-printed JSON
 
-            file.writeText(jsonString) // Speichert die JSON-Datei im Zielverzeichnis
-
+            file.writeText(jsonString)
             println("Datei gespeichert: ${file.absolutePath}")
             true
         } catch (e: Exception) {
             println("Fehler beim Speichern der Datei: ${e.message}")
             false
         }
-
     }
+
 
 
 
@@ -76,7 +75,8 @@ class JsonFileManagement(private val objectMapper: ObjectMapper) {
 
                     directory.listFiles()?.forEach { file ->
                         val lastModified = Instant.ofEpochMilli(file.lastModified())
-                        val hoursDifference = TimeUnit.MILLISECONDS.toHours(currentTime.toEpochMilli() - lastModified.toEpochMilli())
+                        val hoursDifference =
+                            TimeUnit.MILLISECONDS.toHours(currentTime.toEpochMilli() - lastModified.toEpochMilli())
 
                         if (hoursDifference >= 24) {
                             if (file.delete()) {
@@ -131,6 +131,5 @@ class JsonFileManagement(private val objectMapper: ObjectMapper) {
 
 
 
-    fun getAll(): List<Pair<String, ByteArray>> =
-        directory.listFiles()?.map { it.name to Files.readAllBytes(it.toPath()) } ?: emptyList()
+    fun getAll(): List<File> = directory.listFiles()?.toList() ?: emptyList<File>()
 }

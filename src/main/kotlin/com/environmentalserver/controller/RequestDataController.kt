@@ -5,6 +5,7 @@ package com.environmentalserver.controller
 
 import com.environmentalserver.models.JsonFileManagement
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.io.File
 
@@ -12,11 +13,12 @@ import java.io.File
 
 
 @RestController
+@RequestMapping("/request")
 class RequestDataController (private val jsonFileManagement: JsonFileManagement) {
     @GetMapping("/request-all-data")
-    fun requestAllData(): List<Map<String, Any>> {
-        return jsonFileManagement.getAll().map { (fileName, fileContent) ->
-            mapOf("fileName" to fileName, "content" to String(fileContent))
+    fun requestAllData(): List<String> {
+        return jsonFileManagement.getAll().map {
+            it.readText()
         }
     }
 
