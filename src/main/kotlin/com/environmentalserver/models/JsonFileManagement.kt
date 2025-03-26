@@ -132,4 +132,14 @@ class JsonFileManagement(private val objectMapper: ObjectMapper) {
 
 
     fun getAll(): List<File> = directory.listFiles()?.toList() ?: emptyList<File>()
+
+
+
+
+    fun getDataFrom(controllerId: String): List<File> {
+        return directory.listFiles()
+            ?.filter { it.name.contains(controllerId) }
+            ?.toList()
+            ?: emptyList()
+    }
 }

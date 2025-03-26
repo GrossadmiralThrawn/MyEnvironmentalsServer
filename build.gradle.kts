@@ -5,8 +5,10 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
 }
 
+
 group = "com"
 version = "0.0.1-SNAPSHOT"
+
 
 java {
     toolchain {
@@ -14,15 +16,18 @@ java {
     }
 }
 
+
 configurations {
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())
     }
 }
 
+
 repositories {
     mavenCentral()
 }
+
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
@@ -30,6 +35,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
+    //implementation("org.springframework.boot:spring-boot-starter-security") // Neu hinzugefügt
     implementation("org.springframework.boot:spring-boot-starter-json")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0")
     compileOnly("org.projectlombok:lombok")
@@ -38,13 +44,16 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
 }
+
 
 kotlin {
     compilerOptions {
         freeCompilerArgs.addAll("-Xjsr305=strict")
     }
 }
+
 
 tasks.withType<Test> {
     useJUnitPlatform()

@@ -9,4 +9,5 @@ data class ControllerData(
     val humidity:      Float,
     val pressure:      Float,
     val uvIndex:       Float,
+    val light:         Float,
 )
