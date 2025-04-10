@@ -21,14 +21,6 @@ class ReceiveFromMicrocontroller(private val jsonFileManagement: JsonFileManagem
         println(data)
 
 
-        if (jsonFileManagement.getCoroutineRunning())
-        {
-            return jsonFileManagement.writeToJSONFile(data)
-        }
-        else
-        {
-            jsonFileManagement.deleteOldFiles()
-            return jsonFileManagement.writeToJSONFile(data)
-        }
+        return jsonFileManagement.writeToJSONFile(data)
     }
 }

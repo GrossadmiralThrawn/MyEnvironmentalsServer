@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import kotlinx.coroutines.*
 import org.springframework.stereotype.Service
 import java.io.File
-import java.nio.file.Files
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -25,8 +24,10 @@ class JsonFileManagement(private val objectMapper: ObjectMapper) {
     private val sleepingTime: Long = 28800000 // 8 Stunden warten, bevor erneut geprüft wird
 
 
-    fun getCoroutineRunning(): Boolean {
-        return coroutineRunning
+
+
+    init {
+        this.deleteOldFiles()
     }
 
 
@@ -131,7 +132,7 @@ class JsonFileManagement(private val objectMapper: ObjectMapper) {
 
 
 
-    fun getAll(): List<File> = directory.listFiles()?.toList() ?: emptyList<File>()
+    fun getAll(): List<File> = directory.listFiles()?.toList() ?: emptyList()
 
 
 
