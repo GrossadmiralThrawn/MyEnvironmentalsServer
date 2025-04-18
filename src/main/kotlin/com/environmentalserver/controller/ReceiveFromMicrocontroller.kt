@@ -18,9 +18,6 @@ import org.springframework.web.bind.annotation.RestController
 class ReceiveFromMicrocontroller(private val jsonFileManagement: JsonFileManagement) {
     @PostMapping("/standardReceive")
     fun receive(@RequestBody data: ControllerData): Boolean  {
-        println(data)
-
-
         return jsonFileManagement.writeToJSONFile(data)
     }
 }
